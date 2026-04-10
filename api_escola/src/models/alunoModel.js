@@ -1,5 +1,3 @@
-{/* create table cursos ( idCurso serial primary key, nomeCurso varchar(100) not null ) create table turmas ( idTurma serial primary key, idCurso int references cursos(idCurso), anoLetivo int, periodo varchar(20) ) create table alunos ( idAluno serial primary key, idTurma int references turmas(idTurma), nomeCompleto varchar(150), cpf char(14), dataNascimento date, email varchar(100) ) */}
-
 const pool = require('../../db');
 
 const getAll = async () => {
