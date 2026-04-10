@@ -11,6 +11,16 @@ const getAllAlunos = async (req, res) => {
     }
 };
 
+const getVisao = async (req, res) => {
+    try {
+        const alunos = await alunoModel.getVisao();
+        res.status(200).json(alunos);
+    } catch (error) {
+        console.error('Erro ao visualizar:', error);
+        res.status(500).json({ mensagem: 'Erro interno do servidor' });
+    }
+};
+
 const getAlunoById = async (req, res) => {
     const { id } = req.params;
     try {
@@ -52,7 +62,7 @@ const updateAluno = async (req, res) => {
         return res.status(400).json({ mensagem: 'Todos os campos são obrigatórios' });
     }
     try {
-        const alunoAtualizado = await alunoModel.update(id, idTurma, nomeCompleto, cpf, dataNascimento, email);
+        const alunoAtualizado = await alunoModel.update(id, idTurma, cpf, dataNascimento, email);
         if (alunoAtualizado) {
             res.status(200).json(alunoAtualizado);
         } else {
@@ -81,6 +91,7 @@ const deleteAluno = async (req, res) => {
 
 module.exports = {
     getAllAlunos,
+    getVisao,
     getAlunoById,
     createAluno,
     updateAluno,

@@ -11,6 +11,13 @@ const getAll = async () => {
     return result.rows;
 };
 
+const getVisao = async () => {
+    const result = await pool.query(
+        `SELECT * FROM aluno_visao`
+    );
+    return result.rows;
+};
+
 const getById = async (id) => {
     const result = await pool.query(
         `SELECT a.idAluno, a.nomeCompleto, a.cpf, a.dataNascimento, a.email, t.anoLetivo, t.periodo, c.nomeCurso
@@ -59,6 +66,7 @@ const remove = async (id) => {
 
 module.exports = {
     getAll,
+    getVisao,
     getById,
     getByTurmaId,
     create,
