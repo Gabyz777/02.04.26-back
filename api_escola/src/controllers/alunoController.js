@@ -27,13 +27,18 @@ const getAlunoById = async (req, res) => {
 };
 
 const createAluno = async (req, res) => {
-    const { nomeAluno, idTurma } = req.body;
-    if (!nomeAluno || !idTurma) {
+    const { idTurma, nomeCompleto, cpf, dataNascimento, email } = req.body;
+
+    if (!idTurma || !nomeCompleto || !cpf) {
         return res.status(400).json({ mensagem: 'Todos os campos são obrigatórios' });
     }
     try {
         const turma = await turmaModel.getById(idTurma);
-        res.status(201).json(turma);
+        if (!turma) {
+            return res.status(404).json({ mensagem: 'Turma não encontrada' });
+        }
+        const novoAluno = await alunoModel.create(idTurma, nomeCompleto, cpf, dataNascimento, email);
+        res.status(201).json(novoAluno);
     } catch (error) {
         console.error('Erro ao criar aluno:', error);
         res.status(500).json({ mensagem: 'Erro interno do servidor' });
@@ -42,12 +47,12 @@ const createAluno = async (req, res) => {
 
 const updateAluno = async (req, res) => {
     const { id } = req.params;
-    const { nomeAluno, idTurma } = req.body;
-    if (!nomeAluno || !idTurma) {
+    const { idTurma, nomeCompleto, cpf, dataNascimento, email } = req.body;
+    if (!nomeCompleto || !idTurma) {
         return res.status(400).json({ mensagem: 'Todos os campos são obrigatórios' });
     }
     try {
-        const alunoAtualizado = await alunoModel.update(id, nomeAluno, idTurma);
+        const alunoAtualizado = await alunoModel.update(id, idTurma, nomeCompleto, cpf, dataNascimento, email);
         if (alunoAtualizado) {
             res.status(200).json(alunoAtualizado);
         } else {
@@ -62,7 +67,7 @@ const updateAluno = async (req, res) => {
 const deleteAluno = async (req, res) => {
     const { id } = req.params;
     try {
-        const alunoDeletado = await alunoModel.delete(id);
+        const alunoDeletado = await alunoModel.remove(id);
         if (alunoDeletado) {
             res.status(200).json({ mensagem: 'Aluno deletado com sucesso' });
         } else {

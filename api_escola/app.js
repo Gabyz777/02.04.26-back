@@ -11,9 +11,9 @@ const cursoRouter = require('./src/routes/cursoRoutes');
 const turmaRouter = require('./src/routes/turmaRoutes');
 const alunoRouter = require('./src/routes/alunoRoutes');
 
-app.use('/cursos', cursoRouter);
-app.use('/turmas', turmaRouter);
-app.use('/alunos', alunoRouter);
+app.use('/api/cursos', cursoRouter);
+app.use('/api/turmas', turmaRouter);
+app.use('/api/alunos', alunoRouter);
 
 app.get('/', (req, res) => {
     res.send('API REST com Node.js e PostgreSQL está funcionando!');

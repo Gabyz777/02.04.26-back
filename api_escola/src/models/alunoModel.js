@@ -58,3 +58,12 @@ const remove = async (id) => {
     const result = await pool.query('DELETE FROM alunos WHERE idAluno = $1 RETURNING *', [id]);
     return result.rows[0];
 }
+
+module.exports = {
+    getAll,
+    getById,
+    getByTurmaId,
+    create,
+    update,
+    remove
+};

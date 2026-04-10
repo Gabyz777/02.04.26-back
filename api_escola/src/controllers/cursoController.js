@@ -61,14 +61,16 @@ const updateCurso = async (req, res) => {
 const deleteCurso = async (req, res) => {
     const { id } = req.params;
     try {
-        const cursoDeletado = await cursoModel.delete(id);
+        const cursoDeletado = await cursoModel.remove(id);
         if (cursoDeletado) {
             res.status(200).json({ mensagem: 'Curso deletado com sucesso' });
         } else {
             res.status(404).json({ mensagem: 'Curso não encontrado' });
         }
     } catch (error) {
-        console.error('Erro ao deletar curso:', error);
+        if (error.code === '23503') {
+            return res.status(400).json({ mensagem: 'Não é possível deletar o curso, pois ele está associado a outros registros' });
+        }
         res.status(500).json({ mensagem: 'Erro interno do servidor' });
     }
 };

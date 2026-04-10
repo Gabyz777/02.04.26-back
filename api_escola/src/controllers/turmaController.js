@@ -28,12 +28,18 @@ const getTurmaById = async (req, res) => {
 
 const createTurma = async (req, res) => {
     const { idCurso, anoLetivo, periodo } = req.body;
+
     if (!idCurso || !anoLetivo || !periodo) {
         return res.status(400).json({ mensagem: 'Todos os campos são obrigatórios' });
     }
+
     try {
         const curso = await cursoModel.getById(idCurso);
-        res.status(201).json(curso);
+        if (!curso) {
+            return res.status(404).json({ mensagem: 'Curso não encontrado' });
+        }
+        const novaturma = await turmaModel.create(idCurso, anoLetivo, periodo);
+        res.status(201).json(novaturma);
     } catch (error) {
         console.error('Erro ao criar turma:', error);
         res.status(500).json({ mensagem: 'Erro interno do servidor' });
@@ -62,7 +68,7 @@ const updateTurma = async (req, res) => {
 const deleteTurma = async (req, res) => {
     const { id } = req.params;
     try {
-        const turmaDeletada = await turmaModel.delete(id);
+        const turmaDeletada = await turmaModel.remove(id);
         if (turmaDeletada) {
             res.status(200).json({ mensagem: 'Turma deletada com sucesso' });
         } else {
